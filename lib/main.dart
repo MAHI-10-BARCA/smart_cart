@@ -1,11 +1,18 @@
 // lib/main.dart
 
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'providers/cart_provider.dart';
-import 'screens/splash_screen.dart';
+import 'firebase_options.dart';
+import 'screens/auth_gate.dart'; // This is the line that was missing
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
   runApp(const MyApp());
 }
 
@@ -14,8 +21,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ChangeNotifierProvider makes the CartProvider available to all child widgets.
-    // This is the core of our state management.
     return ChangeNotifierProvider(
       create: (context) => CartProvider(),
       child: MaterialApp(
@@ -24,8 +29,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.deepPurple,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        debugShowCheckedModeBanner: false, // Hides the debug banner
-        home: const SplashScreen(), // The app will start with the SplashScreen
+        debugShowCheckedModeBanner: false,
+        home: const AuthGate(), // This line will now work
       ),
     );
   }
